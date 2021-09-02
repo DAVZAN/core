@@ -1,63 +1,30 @@
-"""
-Example of a custom MQTT component.
+"""The Silla integration."""
+from __future__ import annotations
 
-Shows how to communicate with MQTT. Follows a topic on MQTT and updates the
-state of an entity to the last message received on that topic.
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.core import HomeAssistant
 
-Also offers a service 'set_state' that will publish a message on the topic that
-will be passed via MQTT to our message received listener. Call the service with
-example payload {"new_state": "some new state"}.
+from .const import DOMAIN
 
-Configuration:
-To use the mqtt_example component you will need to add the following to your
-configuration.yaml file.
-
-mqtt_basic_async:
-  topic: "home-assistant/mqtt_example"
-"""
-import voluptuous as vol
-
-from homeassistant.components import mqtt
-from homeassistant.core import callback
-
-# The domain of your component. Should be equal to the name of your component.
-DOMAIN = "silla"
-
-CONF_TOPIC = "topic"
-DEFAULT_TOPIC = "/home/prism"
-
-# Schema to validate the configured MQTT topic
-CONFIG_SCHEMA = vol.Schema(
-    {vol.Optional(CONF_TOPIC, default=DEFAULT_TOPIC): mqtt.valid_subscribe_topic}
-)
+# TODO List the platforms that you want to support.
+# For your initial PR, limit it to 1 platform.
+PLATFORMS = ["light"]
 
 
-async def async_setup(hass, config):
-    """Set up the MQTT async example component."""
-    topic = config[DOMAIN][CONF_TOPIC]
-    entity_id = "mqtt_example.last_message"
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Set up Silla from a config entry."""
+    # TODO Store an API object for your platforms to access
+    # hass.data[DOMAIN][entry.entry_id] = MyApi(...)
 
-    # Listen to a message on MQTT.
-    @callback
-    def message_received(topic, payload, qos):
-        """Receive a new MQTT message has been."""
-        hass.states.async_set(entity_id, payload)
+    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
 
-    await hass.components.mqtt.async_subscribe(topic, message_received)
-
-    hass.states.async_set(entity_id, "No messages")
-
-    # Service to publish a message on MQTT.
-    @callback
-    def set_state_service(call):
-        """Service to send a message."""
-        hass.components.mqtt.async_publish(topic, call.data.get("new_state"))
-
-    # Register our service with Home Assistant.
-    hass.services.async_register(DOMAIN, "set_state", set_state_service)
-
-    # Return boolean to indicate that initialization was successfully.
     return True
 
 
-# """The Silla integration."""
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """Unload a config entry."""
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    if unload_ok:
+        hass.data[DOMAIN].pop(entry.entry_id)
+
+    return unload_ok
