@@ -454,6 +454,7 @@ homeassistant/components/shodan/* @fabaff
 homeassistant/components/sia/* @eavanvalkenburg
 homeassistant/components/sighthound/* @robmarkcole
 homeassistant/components/signal_messenger/* @bbernhard
+homeassistant/components/silla/* @DAVZAN
 homeassistant/components/simplisafe/* @bachya
 homeassistant/components/sinch/* @bendikrb
 homeassistant/components/siren/* @home-assistant/core @raman325

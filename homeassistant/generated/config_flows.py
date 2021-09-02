@@ -240,6 +240,7 @@ FLOWS = [
     "shelly",
     "shopping_list",
     "sia",
+    "silla",
     "simplisafe",
     "sma",
     "smappee",
