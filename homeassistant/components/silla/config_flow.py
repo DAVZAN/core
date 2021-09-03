@@ -90,7 +90,7 @@ class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             else:
                 data[CONF_DISCOVERY_PREFIX] = prefix
             if not bad_prefix:
-                return self.async_create_entry(title="Tasmota", data=data)
+                return self.async_create_entry(title="Silla", data=data)
 
         fields = {}
         fields[vol.Optional(CONF_DISCOVERY_PREFIX, default=self._prefix)] = str
@@ -107,6 +107,6 @@ class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         data = {CONF_DISCOVERY_PREFIX: self._prefix}
 
         if user_input is not None:
-            return self.async_create_entry(title="Tasmota", data=data)
+            return self.async_create_entry(title="Silla", data=data)
 
         return self.async_show_form(step_id="confirm")
